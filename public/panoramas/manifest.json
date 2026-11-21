@@ -1,0 +1,146 @@
+{
+  "updatedAt": "2026-11-21T11:36:46.202Z",
+  "model": "Qwen/Qwen-Image",
+  "floors": {
+    "0": {
+      "url": "/panoramas/floor-00-b2.jpg?v=1795219685867",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "B2",
+      "nameZh": "地下车库"
+    },
+    "1": {
+      "url": "/panoramas/floor-01-b1.jpg?v=1795219897138",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "B1",
+      "nameZh": "设备机房"
+    },
+    "2": {
+      "url": "/panoramas/floor-02-1f.jpg?v=1795219807604",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "1F",
+      "nameZh": "现代大堂"
+    },
+    "3": {
+      "url": "/panoramas/floor-03-2f.jpg?v=1795219899285",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "2F",
+      "nameZh": "午夜咖啡吧"
+    },
+    "4": {
+      "url": "/panoramas/floor-04-3f.jpg?v=1795219923463",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "3F",
+      "nameZh": "健身俱乐部"
+    },
+    "5": {
+      "url": "/panoramas/floor-05-4f.jpg?v=1795219949726",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "4F",
+      "nameZh": "共享办公区"
+    },
+    "6": {
+      "url": "/panoramas/floor-06-5f.jpg?v=1795219930101",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "5F",
+      "nameZh": "静谧图书馆"
+    },
+    "7": {
+      "url": "/panoramas/floor-07-6f.jpg?v=1795219957004",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "6F",
+      "nameZh": "创意工作室"
+    },
+    "8": {
+      "url": "/panoramas/floor-08-7f.jpg?v=1795219975457",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "7F",
+      "nameZh": "科技研发层"
+    },
+    "9": {
+      "url": "/panoramas/floor-09-8f.jpg?v=1795219985006",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "8F",
+      "nameZh": "空中餐厅"
+    },
+    "10": {
+      "url": "/panoramas/floor-10-9f.jpg?v=1795220001577",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "9F",
+      "nameZh": "深夜写字楼"
+    },
+    "11": {
+      "url": "/panoramas/floor-11-10f.jpg?v=1795220012858",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "10F",
+      "nameZh": "空中连廊"
+    },
+    "12": {
+      "url": "/panoramas/floor-12-11f.jpg?v=1795220027352",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "11F",
+      "nameZh": "金融交易层"
+    },
+    "13": {
+      "url": "/panoramas/floor-13-12f.jpg?v=1795220040377",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "12F",
+      "nameZh": "霓虹画廊"
+    },
+    "14": {
+      "url": "/panoramas/floor-14-13f.jpg?v=1795220053706",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "13F",
+      "nameZh": "禅意水景厅"
+    },
+    "15": {
+      "url": "/panoramas/floor-15-14f.jpg?v=1795220067955",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "14F",
+      "nameZh": "私享放映厅"
+    },
+    "16": {
+      "url": "/panoramas/floor-16-15f.jpg?v=1795220079812",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "15F",
+      "nameZh": "空中温室"
+    },
+    "17": {
+      "url": "/panoramas/floor-17-16f.jpg?v=1795220095722",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "16F",
+      "nameZh": "云端酒吧"
+    },
+    "18": {
+      "url": "/panoramas/floor-18-17f.jpg?v=1795220105833",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "17F",
+      "nameZh": "行政会所"
+    },
+    "19": {
+      "url": "/panoramas/floor-19-18f.jpg?v=1795260983844",
+      "mode": "wide",
+      "brightness": 0.96,
+      "label": "18F",
+      "nameZh": "星空天台"
+    }
+  }
+}

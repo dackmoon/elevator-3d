@@ -1,0 +1,22 @@
+{
+  "name": "elevator-3d",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "gen:floors": "node scripts/generate-floor-images.mjs",
+    "gen:sample": "node scripts/generate-floor-images.mjs --floors=B2,1F,18F",
+    "gen:sync": "node scripts/generate-floor-images.mjs --sync-only"
+  },
+  "dependencies": {
+    "three": "^0.174.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.174.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.2.0"
+  }
+}
