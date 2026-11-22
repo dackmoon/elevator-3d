@@ -47,8 +47,9 @@ function bootstrap(): void {
   scene.add(worlds.worldGroup);
   scene.add(cabin.group);
 
-  // 4. Audio Engine
+  // 4. Audio Engine (unlock cleanly on first touch/click for iPadOS Safari)
   const sound = new SoundEngine();
+  window.addEventListener('pointerdown', () => sound.unlock(), { once: true });
 
   // 5. Cabin utility toggles
   let emergencyLight = false;

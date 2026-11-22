@@ -9,8 +9,8 @@ export interface InteractionCallbacks {
 }
 
 /**
- * 3D 射线检测交互控制器
- * 精确区分拖拽环顾与物理按钮点击，支持悬停高亮、单击触发、双击取消
+ * 3D 射线检测交互控制器（兼容桌面鼠标 + iPad/触控屏）
+ * 精确区分拖拽环顾与物理按钮点按，支持悬停高亮、单击触发、双击取消
  */
 export class Interaction {
   private readonly raycaster = new THREE.Raycaster();
@@ -45,6 +45,8 @@ export class Interaction {
 
   private bindEvents(): void {
     this.domElement.addEventListener('pointermove', (e) => {
+      // Only show continuous hover highlight for mouse/pen, not touch drag
+      if (e.pointerType === 'touch') return;
       this.updateNdc(e.clientX, e.clientY);
       const picked = this.pickButton();
       if (picked !== this.hoveredId) {
@@ -55,21 +57,29 @@ export class Interaction {
     });
 
     this.domElement.addEventListener('pointerdown', (e) => {
-      if (e.button === 0 && !this.hoveredId) {
+      if (e.pointerType === 'mouse' && e.button === 0 && !this.hoveredId) {
         this.domElement.style.cursor = 'grabbing';
       }
     });
 
     this.domElement.addEventListener('pointerup', (e) => {
-      if (e.button !== 0) return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
       this.updateNdc(e.clientX, e.clientY);
       const picked = this.pickButton();
-      this.domElement.style.cursor = picked ? 'pointer' : 'grab';
+
+      if (e.pointerType === 'touch') {
+        if (this.hoveredId !== null) {
+          this.hoveredId = null;
+          this.callbacks.onHover(null);
+        }
+      } else {
+        this.domElement.style.cursor = picked ? 'pointer' : 'grab';
+      }
 
       if (this.cameraRig.isDraggingGesture || !picked) return;
 
       const now = performance.now();
-      if (this.lastClickId === picked && now - this.lastClickTime < 340) {
+      if (this.lastClickId === picked && now - this.lastClickTime < 380) {
         this.lastClickId = null;
         this.callbacks.onDoubleClick(picked);
       } else {

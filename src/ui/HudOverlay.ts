@@ -50,7 +50,7 @@ export class HudOverlay {
 
       <div class="hud-bottom-bar">
         <div class="hud-presets" id="hud-presets"></div>
-        <div class="hud-hint">左键点击按钮 · 拖拽环顾四周 · 滚轮缩放 · 快捷键 1~9 / 0 / - / = / O / C / R</div>
+        <div class="hud-hint">轻点按钮操作 · 拖动画布环顾 · 滚轮/双指缩放 · 快捷键 1~9 / 0 / - / = / O / C / R</div>
       </div>
     `;
     container.appendChild(this.root);
