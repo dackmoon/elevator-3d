@@ -32,8 +32,9 @@ loadEnvFile(path.join(ROOT_DIR, '.env'));
 
 const API_KEY = process.env.SILICONFLOW_API_KEY?.trim();
 const TTS_URL = process.env.SILICONFLOW_TTS_URL?.trim() || 'https://api.siliconflow.cn/v1/audio/speech';
-const TTS_MODEL = process.env.SILICONFLOW_TTS_MODEL?.trim() || 'fnlp/MOSS-TTSD-v0.5';
-const TTS_VOICE = process.env.SILICONFLOW_TTS_VOICE?.trim() || 'fnlp/MOSS-TTSD-v0.5:alex';
+const TTS_MODEL = process.env.SILICONFLOW_TTS_MODEL?.trim() || 'FunAudioLLM/CosyVoice2-0.5B';
+const TTS_VOICE = process.env.SILICONFLOW_TTS_VOICE?.trim() || 'FunAudioLLM/CosyVoice2-0.5B:claire';
+const TTS_SPEED = Number(process.env.SILICONFLOW_TTS_SPEED || 0.95);
 
 const VOICE_CLIPS = [
   { id: 'door-closing', text: '门正在关闭，请小心。' },
@@ -92,6 +93,7 @@ async function synthesizeClip(item) {
     input: item.text,
     voice: TTS_VOICE,
     response_format: 'mp3',
+    speed: TTS_SPEED,
   };
 
   const res = await fetch(TTS_URL, {
