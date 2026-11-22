@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "gen:floors": "node scripts/generate-floor-images.mjs",
     "gen:sample": "node scripts/generate-floor-images.mjs --floors=B2,1F,18F",
-    "gen:sync": "node scripts/generate-floor-images.mjs --sync-only"
+    "gen:sync": "node scripts/generate-floor-images.mjs --sync-only",
+    "gen:voice": "node scripts/generate-voice-clips.mjs"
   },
   "dependencies": {
     "three": "^0.174.0"

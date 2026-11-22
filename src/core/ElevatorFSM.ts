@@ -3,6 +3,7 @@ import { ElevatorState, FLOOR_HEIGHT, FLOORS, INITIAL_FLOOR_INDEX, MoveDirection
 export interface ElevatorEvents {
   onDoorOpening?: () => void;
   onDoorClosing?: () => void;
+  onStartMoving?: (direction: MoveDirection) => void;
   onArrive?: (floorIndex: number, direction: MoveDirection) => void;
   onStateChange?: (state: ElevatorState) => void;
 }
@@ -225,6 +226,7 @@ export class ElevatorFSM {
     this.targetFloor = next;
     this.direction = next > this.currentFloor ? 1 : -1;
     this.setState('MOVING');
+    this.events.onStartMoving?.(this.direction);
   }
 
   /**

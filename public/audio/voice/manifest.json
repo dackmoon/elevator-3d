@@ -1,0 +1,31 @@
+{
+  "updatedAt": "2026-11-22T01:13:45.966Z",
+  "model": "fnlp/MOSS-TTSD-v0.5",
+  "voice": "fnlp/MOSS-TTSD-v0.5:alex",
+  "clips": {
+    "door-closing": "/audio/voice/door-closing.mp3?v=1795309055649",
+    "going-up": "/audio/voice/going-up.mp3?v=1795309055666",
+    "going-down": "/audio/voice/going-down.mp3?v=1795309055663",
+    "alarm-active": "/audio/voice/alarm-active.mp3?v=1795309056467",
+    "floor-0": "/audio/voice/floor-0.mp3?v=1795309056449",
+    "floor-1": "/audio/voice/floor-1.mp3?v=1795309056463",
+    "floor-2": "/audio/voice/floor-2.mp3?v=1795309057151",
+    "floor-3": "/audio/voice/floor-3.mp3?v=1795309057124",
+    "floor-4": "/audio/voice/floor-4.mp3?v=1795309057168",
+    "floor-5": "/audio/voice/floor-5.mp3?v=1795309057804",
+    "floor-6": "/audio/voice/floor-6.mp3?v=1795309057690",
+    "floor-7": "/audio/voice/floor-7.mp3?v=1795309057881",
+    "floor-8": "/audio/voice/floor-8.mp3?v=1795309058326",
+    "floor-9": "/audio/voice/floor-9.mp3?v=1795309058553",
+    "floor-10": "/audio/voice/floor-10.mp3?v=1795309058555",
+    "floor-11": "/audio/voice/floor-11.mp3?v=1795309058979",
+    "floor-12": "/audio/voice/floor-12.mp3?v=1795309059195",
+    "floor-13": "/audio/voice/floor-13.mp3?v=1795309059218",
+    "floor-14": "/audio/voice/floor-14.mp3?v=1795309059606",
+    "floor-15": "/audio/voice/floor-15.mp3?v=1795309059622",
+    "floor-16": "/audio/voice/floor-16.mp3?v=1795309059824",
+    "floor-17": "/audio/voice/floor-17.mp3?v=1795309060292",
+    "floor-18": "/audio/voice/floor-18.mp3?v=1795309060277",
+    "floor-19": "/audio/voice/floor-19.mp3?v=1795309060465"
+  }
+}

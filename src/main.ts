@@ -60,9 +60,21 @@ function bootstrap(): void {
   // 6. Elevator Finite State Machine
   const elevator = new ElevatorFSM({
     onDoorOpening: () => sound.playDoorMove(true),
-    onDoorClosing: () => sound.playDoorMove(false),
+    onDoorClosing: () => {
+      sound.playDoorMove(false);
+      sound.playVoice('door-closing', { delayMs: 60, interrupt: true });
+    },
+    onStartMoving: (dir) => {
+      if (dir !== 0) {
+        sound.playVoice(dir > 0 ? 'going-up' : 'going-down', {
+          delayMs: 120,
+          queueAfterCurrent: true,
+        });
+      }
+    },
     onArrive: (floorIndex, dir) => {
       sound.playArrivalChime(dir);
+      sound.playVoice(`floor-${floorIndex}`, { delayMs: 460, interrupt: true });
       const floor = FLOORS[floorIndex];
       hud.showToast(`已到达 ${floor.displayLabel} · ${floor.nameZh}`);
     },
@@ -122,6 +134,7 @@ function bootstrap(): void {
 
       const result = elevator.requestFloor(floorIdx);
       sound.playButtonClick(0.9 + floorIdx * 0.018);
+      void sound.preloadVoice(`floor-${floorIdx}`);
       if (result === 'already-here') {
         hud.showToast(`当前已在 ${FLOORS[floorIdx].displayLabel} · ${FLOORS[floorIdx].nameZh}`);
       }
@@ -141,6 +154,11 @@ function bootstrap(): void {
         alarmActive = !alarmActive;
         sound.playButtonClick(alarmActive ? 1.3 : 0.8);
         sound.setAlarm(alarmActive);
+        if (alarmActive) {
+          sound.playVoice('alarm-active', { delayMs: 220, interrupt: true });
+        } else {
+          sound.stopVoice();
+        }
         cabin.setAlarmMode(alarmActive);
         cabin.controlPanel.setButtonLit('sys:alarm', alarmActive);
         hud.showToast(alarmActive ? '紧急警铃已启动（再次点击关闭）' : '紧急警铃已解除');

@@ -24,6 +24,35 @@ export class SoundEngine {
   private alarmActive = false;
   private alarmTimer: number | null = null;
 
+  // Elevator Voice Announcer (Web Audio API decoded MP3 for 100% iPad Safari reliability)
+  private voiceBus: GainNode | null = null;
+  private voiceUrls = new Map<string, string>();
+  private readonly voiceBuffers = new Map<string, AudioBuffer>();
+  private readonly voiceLoading = new Map<string, Promise<AudioBuffer | null>>();
+  private currentVoiceSource: AudioBufferSourceNode | null = null;
+  private currentVoiceEndTime = 0;
+  private voiceTimers: number[] = [];
+  private voiceManifestPromise: Promise<void>;
+
+  constructor() {
+    this.voiceManifestPromise = this.loadVoiceManifest();
+  }
+
+  private async loadVoiceManifest(): Promise<void> {
+    try {
+      const res = await fetch(`/audio/voice/manifest.json?t=${Date.now()}`);
+      if (!res.ok) return;
+      const data = (await res.json()) as { clips?: Record<string, string> };
+      if (data?.clips) {
+        Object.entries(data.clips).forEach(([id, url]) => {
+          this.voiceUrls.set(id, url);
+        });
+      }
+    } catch {
+      // Optional voice clips
+    }
+  }
+
   public unlock(): void {
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
@@ -35,10 +64,36 @@ export class SoundEngine {
       this.setupMotorLoop();
       this.setupFanLoop();
       this.setupRainLoop();
+      this.setupVoiceBus();
+
+      // Preload core frequent announcements once audio is unlocked
+      void this.preloadVoice('door-closing');
+      void this.preloadVoice('going-up');
+      void this.preloadVoice('going-down');
     }
     if (this.ctx.state === 'suspended') {
       void this.ctx.resume();
     }
+  }
+
+  private setupVoiceBus(): void {
+    if (!this.ctx || !this.masterGain) return;
+    // Subtle cabin ceiling-speaker EQ: clean voice presence without harshness
+    const gain = this.ctx.createGain();
+    gain.gain.value = 1.18;
+
+    const hp = this.ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 180;
+
+    const lp = this.ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 7200;
+
+    gain.connect(hp);
+    hp.connect(lp);
+    lp.connect(this.masterGain);
+    this.voiceBus = gain;
   }
 
   public setMuted(mute: boolean): void {
@@ -402,5 +457,107 @@ export class SoundEngine {
     osc2.start(now);
     osc1.stop(now + 0.38);
     osc2.stop(now + 0.38);
+  }
+
+  /**
+   * 预加载并解码指定语音 MP3 到 AudioBuffer 缓存
+   */
+  public async preloadVoice(clipId: string): Promise<AudioBuffer | null> {
+    if (this.voiceBuffers.has(clipId)) {
+      return this.voiceBuffers.get(clipId)!;
+    }
+    if (this.voiceLoading.has(clipId)) {
+      return this.voiceLoading.get(clipId)!;
+    }
+
+    const promise = (async () => {
+      await this.voiceManifestPromise;
+      const url = this.voiceUrls.get(clipId);
+      if (!url || !this.ctx) return null;
+      try {
+        const res = await fetch(url);
+        if (!res.ok) return null;
+        const arrBuf = await res.arrayBuffer();
+        const audioBuf = await this.ctx.decodeAudioData(arrBuf);
+        this.voiceBuffers.set(clipId, audioBuf);
+        return audioBuf;
+      } catch {
+        return null;
+      } finally {
+        this.voiceLoading.delete(clipId);
+      }
+    })();
+
+    this.voiceLoading.set(clipId, promise);
+    return promise;
+  }
+
+  /**
+   * 清除当前播放与排队中的语音
+   */
+  public stopVoice(): void {
+    this.voiceTimers.forEach((t) => window.clearTimeout(t));
+    this.voiceTimers = [];
+    if (this.currentVoiceSource) {
+      try {
+        this.currentVoiceSource.stop();
+      } catch {
+        // Already stopped
+      }
+      this.currentVoiceSource = null;
+    }
+    this.currentVoiceEndTime = 0;
+  }
+
+  /**
+   * 播放电梯中文语音播报（通过 Web Audio API 播放，桌面与 iPad Safari 均稳定生效）
+   */
+  public playVoice(
+    clipId: string,
+    options?: { delayMs?: number; interrupt?: boolean; queueAfterCurrent?: boolean }
+  ): void {
+    this.unlock();
+    if (!this.ctx || !this.voiceBus) return;
+
+    const interrupt = options?.interrupt ?? false;
+    const queueAfterCurrent = options?.queueAfterCurrent ?? false;
+    const baseDelayMs = options?.delayMs ?? 0;
+
+    if (interrupt) {
+      this.stopVoice();
+    }
+
+    let finalDelayMs = baseDelayMs;
+    if (queueAfterCurrent && this.ctx.currentTime < this.currentVoiceEndTime) {
+      const remainMs = Math.ceil((this.currentVoiceEndTime - this.ctx.currentTime) * 1000);
+      finalDelayMs = Math.max(baseDelayMs, remainMs + 140);
+    }
+
+    const timer = window.setTimeout(() => {
+      void (async () => {
+        if (!this.ctx || !this.voiceBus) return;
+        const buf = await this.preloadVoice(clipId);
+        if (!buf || !this.ctx || !this.voiceBus) return;
+
+        // Avoid overlapping two voices simultaneously
+        if (this.currentVoiceSource && this.ctx.currentTime < this.currentVoiceEndTime - 0.05) {
+          try {
+            this.currentVoiceSource.stop();
+          } catch {
+            // ignore
+          }
+        }
+
+        const src = this.ctx.createBufferSource();
+        src.buffer = buf;
+        src.connect(this.voiceBus);
+        const startAt = this.ctx.currentTime;
+        src.start(startAt);
+        this.currentVoiceSource = src;
+        this.currentVoiceEndTime = startAt + buf.duration;
+      })();
+    }, finalDelayMs);
+
+    this.voiceTimers.push(timer);
   }
 }
